@@ -17,7 +17,7 @@ class DiseaseSettings(object):
             test_acc_mean=0.95,
             test_acc_concentration=5.0,
             random_infection_rate_mean=0.05,
-            random_infection_rate_concentration=5.0,
+            random_infection_rate_concentration=20.0,
             random_state=None):
         self.random_state = check_random_state(random_state)
         self.test_acc_mean = test_acc_mean

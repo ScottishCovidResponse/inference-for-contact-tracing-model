@@ -18,6 +18,9 @@ import pandas as pd
 import os
 from docopt import docopt
 from sklearn.ensemble import ExtraTreesRegressor
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import train_test_split
+from six.moves import cPickle as pickle
 import shap
 from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.pyplot as plt
@@ -37,85 +40,85 @@ if __name__ == '__main__':
     X = X.set_index(X.columns[0])
     Y = Y.set_index(Y.columns[0])
     
-    n = X.shape[0]
-    
-    ms_list = np.unique(np.round(np.logspace(np.log10(2.0), np.log10(np.min([1000, n / 2])), 10)).astype(int))
-
     try:
         os.mkdir(outdir)
     except:
         pass
 
-    imp_biased = []
-    imp_unbiased = []
+    imp = []
     for metric in Y.columns:
-        # Step 1. Fitting a non-linear extra-trees regressor with out-of-bag model selection
-        oob_score = [ExtraTreesRegressor(
-            n_estimators=100,
-            criterion='mse',
-            max_depth=None,
-            bootstrap=True,
-            oob_score=True,
-            min_samples_split=ms,
-            random_state=seed).fit(X, Y[metric]).oob_score_ for ms in ms_list]
-        best_ms = ms_list[np.argmin(oob_score)]
-    
-        model = ExtraTreesRegressor(
-            n_estimators=300,
-            criterion='mse',
-            max_depth=None,
-            bootstrap=True,
-            oob_score=True,
-            min_samples_split=best_ms,
-            random_state=seed).fit(X, Y[metric])
+        X_train, X_test, y_train, y_test = train_test_split(X, Y[metric], test_size=0.5, random_state=seed)
+        n_train = X_train.shape[0]
+        ms_list = np.unique(np.round(np.logspace(np.log10(2.0), np.log10(np.min([1000, n_train / 2])), 10)).astype(int))
         
-        # This is a biased but useful importance estimate.
+        model_cv = GridSearchCV(
+            estimator=ExtraTreesRegressor(
+                n_estimators=100,
+                criterion='mse',
+                max_depth=None,
+                bootstrap=True,
+                oob_score=False,
+                random_state=seed),
+            param_grid={
+                'min_samples_split': ms_list,
+                'max_features': [int(1), 0.33, 1.0]
+                },
+            scoring='r2'
+            # scoring=‘neg_mean_poisson_deviance’ # Given the fact that n_deaths is an integer, Poisson loss is considerable
+        ).fit(X_train, y_train)
+
+        # By using best complexity, fit a final model with larger number of trees
+        model = ExtraTreesRegressor(
+            n_estimators=1000,
+            criterion='mse',
+            max_depth=None,
+            bootstrap=True,
+            min_samples_split=model_cv.best_params_['min_samples_split'],
+            max_features=model_cv.best_params_['max_features'],
+            oob_score=False,
+            random_state=seed).fit(X_train, y_train)
+        
         fimp = model.feature_importances_
         fimp /= fimp.sum()
-        imp_biased.append(fimp.reshape(-1, 1))
+        imp.append(fimp.reshape(-1, 1))
     
-        # This is an unbiased but high-variance estimate.
-        model0 = ExtraTreesRegressor(
-            n_estimators=300,
-            criterion='mse',
-            max_features=int(1),
-            max_depth=None,
-            bootstrap=True,
-            oob_score=True,
-            min_samples_split=best_ms,
-            random_state=seed).fit(X, Y[metric])
-        fimp = model0.feature_importances_
-        fimp /= fimp.sum()
-        imp_unbiased.append(fimp.reshape(-1, 1))
-        
         explainer = shap.TreeExplainer(model)
-        shap_values = explainer.shap_values(X)
+        shap_values = explainer.shap_values(X_test)
+        
+        with open('{}/{}.model'.format(outdir, metric), 'wb') as fout:
+            pickle.dump(model, fout)
         
         with PdfPages('{}/{}.pdf'.format(outdir, metric)) as pdf:
             plt.figure(figsize=(6, 6))
-            shap.summary_plot(shap_values, X, show=False)
-            plt.title('Datapoint-specific sensitivities to {}'.format(metric))
+            plt.scatter(model.predict(X_test), y_test)
+            plt.subplots_adjust(left=0.18, bottom=0.12, right=0.98, top=0.92)
+            plt.title('{}\nForecast by Meta-Model vs Actual Outcome by Simulator'.format(metric))
+            plt.xlabel('Forecast')
+            plt.ylabel('Actual')
+            pdf.savefig()
+            plt.close()
+
+            plt.figure(figsize=(12, 6))
+            shap.summary_plot(shap_values, X_test, show=False, plot_size=(12, 6))
+            plt.subplots_adjust(left=0.28, bottom=0.12, right=0.98, top=0.92)
+            plt.title('Datapoint-specific Sensitivities to {}'.format(metric))
             pdf.savefig()
             plt.close()
 
             for xcol in X.columns:
                 plt.figure(figsize=(6, 6))
-                shap.dependence_plot(xcol, shap_values, X, show=False)
-                plt.title('How interaction with {} affects {}'.format(xcol, metric))
+                shap.dependence_plot(xcol, shap_values, X_test, show=False)
+                plt.subplots_adjust(left=0.18, bottom=0.12, right=0.98, top=0.92)
+                plt.title('How Interaction with {} Affects {}'.format(xcol, metric))
                 pdf.savefig()
                 plt.close()
         
-    imp_biased = pd.DataFrame(
-        data=np.hstack(tuple(imp_biased)),
-        index=X.columns,
-        columns=Y.columns
-        )
-    imp_unbiased = pd.DataFrame(
-        data=np.hstack(tuple(imp_unbiased)),
+    imp = pd.DataFrame(
+        data=np.hstack(tuple(imp)),
         index=X.columns,
         columns=Y.columns
         )
 
-    imp_biased.to_csv('{}/relative_importance.biased.csv'.format(outdir))
-    imp_unbiased.to_csv('{}/relative_importance.unbiased.csv'.format(outdir))
-        
+    imp.to_csv('{}/relative_importance.csv'.format(outdir))
+    
+    

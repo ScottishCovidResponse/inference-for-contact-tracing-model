@@ -103,8 +103,8 @@ if __name__ == '__main__':
         with open(disease_file, 'w') as fout:
             json.dump(DiseaseSettings.export(disease_sample), fout)
             
-        # Currently using project sample file, but later we will add purturbation
-        # because contact data are always imperfect samples
+        # Currently using project sample file, but later we will add perturbation
+        # because contact data are always imperfect observations
         contact_file = '{}/input/homogeneous_contacts.csv'.format(java_project_dir)
         initexp_file = '{}/input/initialExposures.csv'.format(java_project_dir)
             
