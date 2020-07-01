@@ -24,6 +24,7 @@ from six.moves import cPickle as pickle
 import shap
 from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.pyplot as plt
+from gplearn.genetic import SymbolicRegressor
 
 if __name__ == '__main__':
     args = docopt(__doc__, version='0.0.1')

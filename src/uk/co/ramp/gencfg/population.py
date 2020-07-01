@@ -30,6 +30,9 @@ class PopulationSettings(object):
 
         alpha = np.array([0.1759, 0.1171, 0.4029, 0.1222, 0.1819]) * self.population_concentration
         popdist = random_state.dirichlet(alpha)
+        # Occasionally, popdist above does not satisfy the constraint s.t. sum=1.
+        popdist /= popdist.sum()
+        
         for i in range(5):
             result['population_distribution_{}'.format(i)] = popdist[i]
         

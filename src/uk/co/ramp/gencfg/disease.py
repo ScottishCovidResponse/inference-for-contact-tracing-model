@@ -18,12 +18,16 @@ class DiseaseSettings(object):
             test_acc_concentration=5.0,
             random_infection_rate_mean=0.05,
             random_infection_rate_concentration=20.0,
+            exposure_probability4unit_contact_mean=0.01,
+            exposure_probability4unit_contact_concentration=20.0,
             random_state=None):
         self.random_state = check_random_state(random_state)
         self.test_acc_mean = test_acc_mean
         self.test_acc_concentration = test_acc_concentration
         self.random_infection_rate_mean = random_infection_rate_mean
         self.random_infection_rate_concentration = random_infection_rate_concentration
+        self.exposure_probability4unit_contact_mean = exposure_probability4unit_contact_mean
+        self.exposure_probability4unit_contact_concentration = exposure_probability4unit_contact_concentration
     
     def next(self):
         """
@@ -56,8 +60,12 @@ class DiseaseSettings(object):
             self.test_acc_concentration * (1.0 - self.test_acc_mean)
             )
         
-        result['exposure_tuning'] = 100.0 * random_state.lognormal(0.0, 1.0)
         result['exposure_threshold'] = 50.0 * random_state.lognormal(0.0, 1.0)
+        result['exposure_probability4unit_contact'] = random_state.beta(
+            self.exposure_probability4unit_contact_concentration * self.exposure_probability4unit_contact_mean,
+            self.exposure_probability4unit_contact_concentration * (1.0 - self.exposure_probability4unit_contact_mean)
+            )
+        result['exposure_exponent'] = random_state.lognormal(0.0, 1.0)
         
         result['random_infection_rate'] = random_state.beta(
             self.random_infection_rate_concentration * self.random_infection_rate_mean,
@@ -107,8 +115,9 @@ class DiseaseSettings(object):
                 "max": param_dict['time_test_result_max']
             },
             "testAccuracy": param_dict['test_accuracy'],
-            "exposureTuning": param_dict['exposure_tuning'],
             "exposureThreshold": param_dict['exposure_threshold'],
+            "exposureProbability4UnitContact": param_dict['exposure_probability4unit_contact'],
+            "exposureExponent": param_dict['exposure_exponent'],
             "randomInfectionRate": param_dict['random_infection_rate'],
             "progressionDistribution": "EXPONENTIAL"
             }

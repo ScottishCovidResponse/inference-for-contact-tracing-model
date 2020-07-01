@@ -26,7 +26,7 @@ from docopt import docopt
 from uk.co.ramp.gencfg.disease import DiseaseSettings
 from uk.co.ramp.gencfg.population import PopulationSettings
 
-loss_names = ['total_severity', 'total_death']
+loss_names = ['peak_severity', 'total_death']
 
 def losses(output_summary):
     """
@@ -36,8 +36,12 @@ def losses(output_summary):
     Examples considerable are
         Total number of deaths
         DTW distance between the output and observations in the real world (when doing parameter estimation)
+        
+        
+    Because output_summary is given as total population, number of death at the LAST timestamp is taken.
+    About severity, here we focus on the peak value, that is hitting hospital capacity.
     """
-    return [output_summary['sev'].sum(), output_summary['d'].sum()]
+    return [output_summary['sev'].max(), output_summary['d'].iloc[-1]]
     
 
 
@@ -107,13 +111,17 @@ if __name__ == '__main__':
         # because contact data are always imperfect observations
         contact_file = '{}/input/homogeneous_contacts.csv'.format(java_project_dir)
         initexp_file = '{}/input/initialExposures.csv'.format(java_project_dir)
+        alertpolicy_file='{}/input/alertPolicies.json'.format(java_project_dir)
+        isopolicy_file='{}/input/isolationPolicies.json'.format(java_project_dir)
             
         input_locations = {
           'runSettings': run_file,
           'populationSettings': population_file,
           'diseaseSettings': disease_file,
           'contactData': contact_file,
-          'initialExposures': initexp_file
+          'initialExposures': initexp_file,
+          'alertPolicies': alertpolicy_file,
+          'isolationPolicies': isopolicy_file
         }
         
         with open(input_loc_file, 'w') as fout:
