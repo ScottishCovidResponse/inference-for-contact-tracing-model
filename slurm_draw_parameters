@@ -10,9 +10,15 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 
+#! Set file paths for output to stdout and stderr:
+#! %A means slurm job ID and %a means array index
+#! (Note: It appears that these can _not_ go in the folders we create for each job)
+#SBATCH --output=job_%A_%a_std.out
+#SBATCH --error=job_%A_%a_std.err
+
 #! Set a time limit (e.g. 5 minutes)
 #! TODO: Ensure this time limit is not too short for your jobs
-#SBATCH --time=00:05:00
+#SBATCH --time=01:00:00
 
 #! Set --mail-type=FAIL to get an email if the job array fails
 #SBATCH --mail-type=FAIL
@@ -38,7 +44,6 @@
 module purge                               # Remove all modules still loaded
 module load rhel7/default-peta4            # Load the basic (required) environment
 module python                              # Load python
-#module load jdk-8u141-b15-intel-17.0.4-3g6rhr2 # Load Java
 
 #! These folders should be modified to match with each user's environment
 export PYTHONPATH=${PYTHONPATH}:${python_project_dir}/src
@@ -54,15 +59,8 @@ work_dir="${HOME}/covid-19/draw_${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}"
 mkdir -p ${work_dir}
 cd ${python_project_dir}
 
-#! Set file paths for output to stdout and stderr:
-#! %A means slurm job ID and %a means array index
-#! (Note: It appears that these can _not_ go in the folders we create for each job)
-#SBATCH --output=${work_dir}/job_%A_%a_std.out
-#SBATCH --error=${work_dir}/job_%A_%a_std.err
-
 python src/draw_parameters.py ${work_dir} \
 	--job-name=draw_${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID} \
 	--java-project-dir=${java_project_dir} \
-	--n-simulations=1000 \
-	--output-summary-file=Compartments.csv \
+	--n-simulations=100 \
 	--seed=${SLURM_ARRAY_JOB_ID}${SLURM_ARRAY_TASK_ID}

@@ -24,7 +24,6 @@ from six.moves import cPickle as pickle
 import shap
 from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.pyplot as plt
-from gplearn.genetic import SymbolicRegressor
 
 if __name__ == '__main__':
     args = docopt(__doc__, version='0.0.1')
@@ -114,12 +113,6 @@ if __name__ == '__main__':
                 pdf.savefig()
                 plt.close()
         
-    imp = pd.DataFrame(
-        data=np.hstack(tuple(imp)),
-        index=X.columns,
-        columns=Y.columns
-        )
-
+    imp = pd.DataFrame(data=np.hstack(tuple(imp)), index=X.columns, columns=Y.columns)
     imp.to_csv('{}/relative_importance.csv'.format(outdir))
-    
     

@@ -23,7 +23,7 @@ import numpy as np
 import pandas as pd
 import shutil
 from docopt import docopt
-from os.path import expanduser, dirname, realpath, sep, pardir
+from os.path import expanduser, dirname, realpath, sep
 from scipy.odr.odrpack import Output
 sys.path.append(dirname(realpath(__file__)))
 from uk.co.ramp.gencfg.disease import DiseaseSettings
@@ -57,25 +57,25 @@ if __name__ == '__main__':
     java_project_dir = _getopt('--java-project-dir', expanduser('~/git/Contact-Tracing-Model'))
     output_summary_file = _getopt('--output-summary-file', 'Compartments.csv')
     
-    output_dir = _getopt('<OUTPUT_DIR>', None)
-    tmp_input_dir = '{}/config'.format(output_dir)
-    tmp_output_dir = '{}/data'.format(output_dir)
+    top_output_dir = _getopt('<OUTPUT_DIR>', None)
+    input_dir = '{}/config'.format(top_output_dir)
+    output_dir = '{}/data'.format(top_output_dir)
     jobname = _getopt('--job-name', 'job')
     n_simulations = int(_getopt('--n-simulations', 1000))
     seed = int(_getopt('--seed', 1234))
     
     try:
+        os.mkdir(top_output_dir)
+    except:
+        pass
+    
+    try:
+        os.mkdir(input_dir)
+    except:
+        pass
+    
+    try:
         os.mkdir(output_dir)
-    except:
-        pass
-    
-    try:
-        os.mkdir(tmp_input_dir)
-    except:
-        pass
-    
-    try:
-        os.mkdir(tmp_output_dir)
     except:
         pass
 
@@ -98,10 +98,10 @@ if __name__ == '__main__':
         # For contact data we could add random noise in the future, for reflecting
         # the missing contacts not recorded in contact data.
         for key, val in input_locations.items():
-            shutil.copy2('{}/input/{}'.format(java_project_dir, val), tmp_input_dir)
+            shutil.copy2('{}/input/{}'.format(java_project_dir, val), input_dir)
     
         # Each job should have a unique seed in runSettings
-        run_file = '{}/runSettings.json'.format(tmp_input_dir)
+        run_file = '{}/runSettings.json'.format(input_dir)
         with open(run_file, 'r') as fin:
             run_sample = json.load(fin)
         run_sample['seed'] = seed + trial  # override
@@ -109,7 +109,7 @@ if __name__ == '__main__':
             json.dump(run_sample, fout)
 
         # Due to outflow/inflow of people, population should also be slightly perturbed.
-        population_file = '{}/populationSettings.json'.format(tmp_input_dir)
+        population_file = '{}/populationSettings.json'.format(input_dir)
         population_sample = population.next()
         if trial == 0:
             for key in population_sample.keys():
@@ -119,7 +119,7 @@ if __name__ == '__main__':
             json.dump(PopulationSettings.export(population_sample), fout)
         
         # Disease settings are highly perturbed because they are main parameters
-        disease_file = '{}/diseaseSettings.json'.format(tmp_input_dir)
+        disease_file = '{}/diseaseSettings.json'.format(input_dir)
         disease_sample = disease.next()
         if trial == 0:
             for key in disease_sample.keys():
@@ -128,16 +128,16 @@ if __name__ == '__main__':
         with open(disease_file, 'w') as fout:
             json.dump(DiseaseSettings.export(disease_sample), fout)
 
-        os.system("gradle run --args='overrideInputFolderLocation={} seed={}'".format(tmp_input_dir, seed * n_simulations + trial))
+        os.system("gradle run --args='overrideInputFolderLocation={} overrideOutputFolderLocation={} seed={}'".format(input_dir, output_dir, seed * n_simulations + trial))
         X.append(np.concatenate(X_t).reshape(1, -1))
     
         # Read the summary results file and calculate the summary statistic
-        output_summary = pd.read_csv('{}/{}'.format(java_project_dir, output_summary_file)).set_index('time')
+        output_summary = pd.read_csv('{}/{}'.format(output_dir, output_summary_file)).set_index('time')
         Y.append(np.array(losses(output_summary)).reshape(1, -1))
     
     outindex = np.array(['{}.sample{}'.format(jobname, trial) for trial in range(n_simulations)])
     X = pd.DataFrame(data=np.vstack(tuple(X)), index=outindex, columns=X_columns)
     Y = pd.DataFrame(data=np.vstack(tuple(Y)), index=outindex, columns=loss_names)
     
-    X.to_csv('{}/input_parameter_samples.csv'.format(tmp_output_dir))
-    Y.to_csv('{}/output_loss_samples.csv'.format(tmp_output_dir))
+    X.to_csv('{}/input_parameter_samples.csv'.format(output_dir))
+    Y.to_csv('{}/output_loss_samples.csv'.format(output_dir))
