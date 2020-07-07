@@ -58,8 +58,6 @@ if __name__ == '__main__':
     output_summary_file = _getopt('--output-summary-file', 'Compartments.csv')
     
     top_output_dir = _getopt('<OUTPUT_DIR>', None)
-    input_dir = '{}/config'.format(top_output_dir)
-    output_dir = '{}/data'.format(top_output_dir)
     jobname = _getopt('--job-name', 'job')
     n_simulations = int(_getopt('--n-simulations', 1000))
     seed = int(_getopt('--seed', 1234))
@@ -69,16 +67,6 @@ if __name__ == '__main__':
     except:
         pass
     
-    try:
-        os.mkdir(input_dir)
-    except:
-        pass
-    
-    try:
-        os.mkdir(output_dir)
-    except:
-        pass
-
     os.chdir(java_project_dir)
     
     disease = DiseaseSettings(random_state=seed)
@@ -90,6 +78,24 @@ if __name__ == '__main__':
     for trial in range(n_simulations):
         X_t = []
         
+        subdir = '{}/draw{}'.format(top_output_dir, trial)
+        input_dir = '{}/config'.format(subdir, trial)
+        output_dir = '{}/data'.format(subdir, trial)
+        try:
+            os.mkdir(subdir)
+        except:
+            pass
+
+        try:
+            os.mkdir(input_dir)
+        except:
+            pass
+        
+        try:
+            os.mkdir(output_dir)
+        except:
+            pass
+
         input_loc_file = '{}/input/inputLocations.json'.format(java_project_dir)
         with open(input_loc_file, 'r') as fin:
             input_locations = json.load(fin)
@@ -128,7 +134,7 @@ if __name__ == '__main__':
         with open(disease_file, 'w') as fout:
             json.dump(DiseaseSettings.export(disease_sample), fout)
 
-        os.system("gradle run --args='overrideInputFolderLocation={} overrideOutputFolderLocation={} seed={}'".format(input_dir, output_dir, seed * n_simulations + trial))
+        os.system("gradle run --args='--overrideInputFolderLocation={} --overrideOutputFolderLocation={} --seed={}'".format(input_dir, output_dir, seed + trial))
         X.append(np.concatenate(X_t).reshape(1, -1))
     
         # Read the summary results file and calculate the summary statistic
