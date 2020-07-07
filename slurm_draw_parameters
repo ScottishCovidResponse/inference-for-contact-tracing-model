@@ -6,12 +6,6 @@
 #! Charge the SCRC project:
 #SBATCH -A DIRAC-DC003-CPU
 
-#! Set file paths for output to stdout and stderr:
-#! %A means slurm job ID and %a means array index
-#! (Note: It appears that these can _not_ go in the folders we create for each job)
-#SBATCH --output=job_%A_%a_std.out
-#SBATCH --error=job_%A_%a_std.err
-
 #! Simple single core jobs use one node and one task
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
@@ -56,16 +50,19 @@ java_project_dir="${HOME}/git/Contact-Tracing-Model"
 #! SLURM_SUBMIT_DIR is the directory in which sbatch is run
 #! SLURM_ARRAY_TASK_ID is the array index for each job
 #! SLURM_ARRAY_JOB_ID is the job array's master job ID number
-result_dir="${HOME}/covid-19/result_${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}"
-tmp_dir="${HOME}/covid-19/tmp_${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}"
-mkdir -p ${result_dir}
-mkdir -p ${tmp_dir}
+work_dir="${HOME}/covid-19/draw_${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}"
+mkdir -p ${work_dir}
 cd ${python_project_dir}
 
-python src/draw_parameters.py ${java_project_dir}/input ${result_dir} \
+#! Set file paths for output to stdout and stderr:
+#! %A means slurm job ID and %a means array index
+#! (Note: It appears that these can _not_ go in the folders we create for each job)
+#SBATCH --output=${work_dir}/job_%A_%a_std.out
+#SBATCH --error=${work_dir}/job_%A_%a_std.err
+
+python src/draw_parameters.py ${work_dir} \
+	--job-name=draw_${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID} \
 	--java-project-dir=${java_project_dir} \
-	--tmp-dir=${tmp_dir} \
 	--n-simulations=1000 \
 	--output-summary-file=Compartments.csv \
 	--seed=${SLURM_ARRAY_JOB_ID}${SLURM_ARRAY_TASK_ID}
-
