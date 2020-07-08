@@ -145,5 +145,5 @@ if __name__ == '__main__':
     X = pd.DataFrame(data=np.vstack(tuple(X)), index=outindex, columns=X_columns)
     Y = pd.DataFrame(data=np.vstack(tuple(Y)), index=outindex, columns=loss_names)
     
-    X.to_csv('{}/input_parameter_samples.csv'.format(output_dir))
-    Y.to_csv('{}/output_loss_samples.csv'.format(output_dir))
+    X.to_csv('{}/input_parameter_samples.csv'.format(top_output_dir))
+    Y.to_csv('{}/output_loss_samples.csv'.format(top_output_dir))

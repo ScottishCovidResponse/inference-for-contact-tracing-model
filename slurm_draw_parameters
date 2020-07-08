@@ -28,14 +28,6 @@
 #! For 6GB per CPU, set "-p skylake"; for 12GB per CPU, set "-p skylake-himem": 
 #SBATCH -p skylake
 
-#! Note: Charging is determined by core number*walltime (doubled for 12GB per CPU)
-
-#! This submits a job array with a range of index values --array=[first]-[last]:[step]
-#! ("--array=0-15:4" is equivalent to "--array=0,4,8,12")
-#! TODO: Set your required job array here (with the required number of jobs and
-#!       a step size equal to the number of iterations in each job)
-#SBATCH --array=0-1:1
-
 #! sbatch directives end here (put any additional directives above this line)
 
 #! Setup the environment seen by the application
@@ -67,9 +59,5 @@ python src/draw_parameters.py ${work_dir} \
 	--n-simulations=${n_simulations_per_task} \
 	--seed=${SLURM_ARRAY_JOB_ID}${SLURM_ARRAY_TASK_ID}
 
-touch ${work_dir}/workdirlist.txt
-last_index=`expr ${n_simulations_per_task} - 1`
-for i in $(seq 0 ${last_index})
-do
-	echo ${work_dir}/sample${i}/data >> ${work_dir}/workdirlist.txt
-done
+rm -f ${work_dir}/workdirlist.txt
+echo ${work_dir} > ${work_dir}/workdirlist.txt

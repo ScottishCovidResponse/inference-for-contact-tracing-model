@@ -7,7 +7,7 @@ n_simulations_per_task=100
 workdir=${HOME}/covid-19/sensitivity1000
 
 # Parallel sampling of parameters and results
-sbatch --wait --array=1-${n_tasks}:1 slurm_draw_parameters ${workdir} ${n_simulations_per_task}
+sbatch --wait --array=1-${n_tasks} slurm_draw_parameters ${workdir} ${n_simulations_per_task}
 
 # Unifying the results into CSV files
 dirlistfile=${workdir}/workdirlist.txt
