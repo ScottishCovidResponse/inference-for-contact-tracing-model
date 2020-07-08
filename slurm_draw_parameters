@@ -71,5 +71,5 @@ touch ${work_dir}/workdirlist.txt
 last_index=`expr ${n_simulations_per_task} - 1`
 for i in $(seq 0 ${last_index})
 do
-	echo ${work_dir}/sample${i} >> ${work_dir}/workdirlist.txt
+	echo ${work_dir}/sample${i}/data >> ${work_dir}/workdirlist.txt
 done
