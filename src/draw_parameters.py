@@ -78,7 +78,7 @@ if __name__ == '__main__':
     for trial in range(n_simulations):
         X_t = []
         
-        subdir = '{}/draw{}'.format(top_output_dir, trial)
+        subdir = '{}/sample{}'.format(top_output_dir, trial)
         input_dir = '{}/config'.format(subdir, trial)
         output_dir = '{}/data'.format(subdir, trial)
         try:
