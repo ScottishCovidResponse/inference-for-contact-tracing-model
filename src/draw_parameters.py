@@ -1,7 +1,7 @@
 """Random Drawing of (Parameter, Output Statistic) Samples for Sensitivity Analysis
 
 Usage:
-  draw_parameters.py <OUTPUT_DIR> [--job-name=<name>] [--n-simulations=<n_sim>] [--seed=<seed>] [--java-project-dir=<JPDIR>] [--output-summary-file=<OSFILE>]
+  draw_parameters.py <OUTPUT_DIR> [--job-name=<name>] [--n-simulations=<n_sim>] [--seed=<seed>] [--java-project-dir=<JPDIR>] [--output-summary-file=<OSFILE>] [--save-all=<BOOL>]
   draw_parameters.py (-h | --help)
   draw_parameters.py --version
 
@@ -13,6 +13,7 @@ Options:
   --seed=<seed>                   Random seed [default: 1234].
   --java-project-dir=<JPDIR>      Project directory of Contact Tracing Model Java codes
   --output-summary-file=<OSFILE>  CSV file that stores a summary of one simulation [default: Compartments.csv]
+  --save-all=<BOOL>               Store all Monte Carlo samples if True [default: False] 
   
 """
 
@@ -62,6 +63,7 @@ if __name__ == '__main__':
     jobname = _getopt('--job-name', 'job')
     n_simulations = int(_getopt('--n-simulations', 1000))
     seed = int(_getopt('--seed', 1234))
+    save_all = _getopt('--save-all', False)
     
     try:
         os.mkdir(top_output_dir)
@@ -78,10 +80,14 @@ if __name__ == '__main__':
     Y = []
     for trial in range(n_simulations):
         X_t = []
-        
-        subdir = '{}/sample{}'.format(top_output_dir, trial)
+
+        if save_all:       
+            subdir = '{}/sample{}'.format(top_output_dir, trial)
+        else:
+            subdir = top_output_dir
         input_dir = '{}/config'.format(subdir, trial)
         output_dir = '{}/data'.format(subdir, trial)
+            
         try:
             os.mkdir(subdir)
         except:
