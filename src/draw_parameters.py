@@ -1,19 +1,19 @@
 """Random Drawing of (Parameter, Output Statistic) Samples for Sensitivity Analysis
 
 Usage:
-  draw_parameters.py <OUTPUT_DIR> [--job-name=<name>] [--n-simulations=<n_sim>] [--seed=<seed>] [--java-project-dir=<JPDIR>] [--output-summary-file=<OSFILE>] [--save-all=<BOOL>]
+  draw_parameters.py <OUTPUT_DIR> [--job-name=<name>] [--n-simulations=<n_sim>] [--seed=<seed>] [--java-project-dir=<JPDIR>] [--output-summary-file=<OSFILE>] [--save-all]
   draw_parameters.py (-h | --help)
   draw_parameters.py --version
 
 Options:
   -h --help                       Show this screen.
   --version                       Show version.
-  --job-name=<name>                This name is used for output indexing [default: job]
+  --job-name=<name>               This name is used for output indexing [default: job]
   --n-simulations=<n_sim>         Number of parameter samples generated [default: 1000].
   --seed=<seed>                   Random seed [default: 1234].
   --java-project-dir=<JPDIR>      Project directory of Contact Tracing Model Java codes
   --output-summary-file=<OSFILE>  CSV file that stores a summary of one simulation [default: Compartments.csv]
-  --save-all=<BOOL>               Store all Monte Carlo samples if True [default: False] 
+  --save-all                      Store all Monte Carlo samples 
   
 """
 
