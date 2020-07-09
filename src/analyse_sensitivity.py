@@ -35,8 +35,8 @@ if __name__ == '__main__':
     outdir = _getopt('<OUTPUT_DIR>', None)
     seed = int(_getopt('--seed', 1234))
 
-    X = pd.read_csv('{}/input_parameter_samples.csv'.format(indir))
-    Y = pd.read_csv('{}/output_loss_samples.csv'.format(indir))
+    X = pd.read_csv('{}/input_parameter_samples.csv'.format(indir), index_col=0)
+    Y = pd.read_csv('{}/output_loss_samples.csv'.format(indir), index_col=0)
     X = X.set_index(X.columns[0])
     Y = Y.set_index(Y.columns[0])
     
@@ -63,10 +63,8 @@ if __name__ == '__main__':
                 'min_samples_split': ms_list,
                 'max_features': [int(1), 0.33, 1.0]
                 },
-            scoring='r2'
-            # scoring=‘neg_mean_poisson_deviance’ # Given the fact that n_deaths is an integer, Poisson loss is considerable
-        ).fit(X_train, y_train)
-
+            scoring='neg_mean_squared_error').fit(X_train, y_train)
+            
         # By using best complexity, fit a final model with larger number of trees
         model = ExtraTreesRegressor(
             n_estimators=1000,
