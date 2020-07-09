@@ -53,11 +53,12 @@ work_dir="${top_work_dir}/job_${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}"
 mkdir -p ${work_dir}
 cd ${python_project_dir}
 
+seed=`expr ${SLURM_ARRAY_JOB_ID}${SLURM_ARRAY_TASK_ID} % 2147483648`
 python src/draw_parameters.py ${work_dir} \
 	--job-name=job_${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID} \
 	--java-project-dir=${java_project_dir} \
 	--n-simulations=${n_simulations_per_task} \
-	--seed=${SLURM_ARRAY_JOB_ID}${SLURM_ARRAY_TASK_ID}
+	--seed=${seed}
 
 rm -f ${work_dir}/workdirlist.txt
 echo ${work_dir} > ${work_dir}/workdirlist.txt

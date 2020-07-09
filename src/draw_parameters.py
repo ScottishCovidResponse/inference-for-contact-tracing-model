@@ -22,6 +22,7 @@ import sys
 import numpy as np
 import pandas as pd
 import shutil
+import time
 from docopt import docopt
 from os.path import expanduser, dirname, realpath, sep
 from scipy.odr.odrpack import Output
@@ -134,7 +135,17 @@ if __name__ == '__main__':
         with open(disease_file, 'w') as fout:
             json.dump(DiseaseSettings.export(disease_sample), fout)
 
-        os.system("gradle run --args='--overrideInputFolderLocation={} --overrideOutputFolderLocation={} --seed={}'".format(input_dir, output_dir, seed + trial))
+        finished = False
+        while not finished:
+           exitcode = os.system("{}/build/install/ContactTracing/bin/ContactTracing --overrideInputFolderLocation={} --overrideOutputFolderLocation={} --seed={}".format(java_project_dir, input_dir, output_dir, seed + trial))
+           if exitcode > 0:
+               time.sleep(3)
+               os.system('gradle install')
+               time.sleep(3)
+               continue
+           else:
+               finished = True
+            
         X.append(np.concatenate(X_t).reshape(1, -1))
     
         # Read the summary results file and calculate the summary statistic
