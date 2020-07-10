@@ -21,4 +21,4 @@ done
 python src/unify_draws.py ${dirlistfile} ${workdir}
 
 # Draw SHAP plots for the final sensitivity analysis
-python src/analyse_sensitivity.py ${workdir} ${workdir}
+python src/analyse_sensitivity.py ${workdir}
