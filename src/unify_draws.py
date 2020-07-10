@@ -38,8 +38,8 @@ if __name__ == '__main__':
     X = []
     Y = []
     for indir in dirlist:
-        X_i = pd.read_csv('{}/input_parameter_samples.csv'.format(indir))
-        Y_i = pd.read_csv('{}/output_loss_samples.csv'.format(indir))
+        X_i = pd.read_csv('{}/input_parameter_samples.csv'.format(indir), index_col=0)
+        Y_i = pd.read_csv('{}/output_loss_samples.csv'.format(indir), index_col=0)
         X.append(X_i)
         Y.append(Y_i)
     X = pd.concat(X, axis=0)
