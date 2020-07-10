@@ -30,7 +30,7 @@ python analyse_sensitivity.py
 
 Make sure that you installed all of the required python packages and correctly set `${PYTHONPATH}`. Then
 by the commands below you get summary results as `total_death.pdf`, `peak_severity.pdf`, and
-`relative_importance.csv` under the `${HOME}/covid-19/sensitivity1000/` directory.
+`relative_importance.csv` under the `${HOME}/covid-19/sensitivity1000` directory.
 The two PDF files provide various [SHAP](https://github.com/slundberg/shap) plots for understanding the non-linear dependence between each parameter and two metrics: the total number of deaths in the whole period and 
 the peak of the number of severe infections defined as the maximum of severity in output time-series.
 The CSV file `relative_importance.csv` shows numerical values of parameter importance in general.
@@ -44,7 +44,7 @@ python src/draw_parameters.py ~/covid-19/sensitivity1000 \
 	--n-simulations=1000 \
    --java-project-dir=~/git/Contact-Tracing-Model
   
-python analyse_sensitivity.py ~/covid-19/sensitivity1000 ~/covid-19/sensitivity1000
+python analyse_sensitivity.py ~/covid-19/sensitivity1000
 ```
 
 Internally, `src/draw_parameters.py` 
@@ -58,4 +58,15 @@ In order to ensure the robustness of implications, we encourage to watch the res
 are 1,000, 10,000, and 100,000. Specifically for the DiRAC cluster, we implemented scripts for parallel
 simulations using SLURM. You can refer to [this document](run_at_DiRAC.md) for the details.
 
+# How to Read the Analysis Results
 
+We stress the importance of both qualitatively and quantitatively understanding 
+the relationship between input parameters and simulation outputs, which is non-linear. 
+While understanding high-dimensional non-linear system is hard for ordinary humans,
+we can get a good picture thanks to [SHAP](https://github.com/slundberg/shap) that enables evaluation of
+each input parameter's impact towards output per-sample basis.
+For full understanding of SHAP, we encourage users to read the [NeurIPS paper](http://papers.nips.cc/paper/7062-a-unified-approach-to-interpreting-model-predictions) and/or [Nature Machine Intelligence paper](https://www.nature.com/articles/s42256-019-0138-9) that explains how SHAP values are efficiently computed when the predictor is a tree ensemble.
+
+For users who do not have time to read the full papers, we here prepared 
+[a simplified document](interprete_analysis.md) about how to read the analysis results intuitively,
+while only the essential parts in mathematical formulation are explained.
