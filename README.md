@@ -63,7 +63,7 @@ simulations using SLURM. You can refer to [this document](run_at_DiRAC.md) for t
 We stress the importance of both qualitatively and quantitatively understanding 
 the relationship between input parameters and simulation outputs, which is non-linear. 
 While understanding high-dimensional non-linear system is hard for ordinary humans,
-we can get a good picture thanks to [SHAP](https://github.com/slundberg/shap) that enables evaluation of
+we can get a good picture thanks to [SHapley Additive exPlanations](https://github.com/slundberg/shap) that enables evaluation of
 each input parameter's impact towards output per-sample basis.
 For full understanding of SHAP, we encourage users to read the [NeurIPS paper](http://papers.nips.cc/paper/7062-a-unified-approach-to-interpreting-model-predictions) and/or [Nature Machine Intelligence paper](https://www.nature.com/articles/s42256-019-0138-9) that explains how SHAP values are efficiently computed when the predictor is a tree ensemble.
 
