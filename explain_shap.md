@@ -78,9 +78,7 @@ and <img src="https://render.githubusercontent.com/render/math?math=\widehat{f}_
 <img src="https://render.githubusercontent.com/render/math?math=\boldsymbol{x}"> other than those included in set 
 <img src="https://render.githubusercontent.com/render/math?math={\mathcal S}">. Then we define
 
-<img src="https://render.githubusercontent.com/render/math?math=\phi_i(\boldsymbol{x}_t)=\sum_{{\mathcal S}\subseteq{\mathcal F}}\dfrac{\vert{\mathcal S}\vert!(\vert{\mathcal F}\vert-\vert{\mathcal S}\vert-1)!}{\vert{\mathcal F}\vert!}
-\left[\widehat{f}_{{\mathcal S}\cup\lbrace i \rbrace}(\boldsymbol{x}_t)-\widehat{f}_{\mathcal S}(\boldsymbol{x}_t)\right]
-">
+<img src="https://render.githubusercontent.com/render/math?math=\phi_i(\boldsymbol{x}_t)=\sum_{{\mathcal S}\subseteq{\mathcal F}}\dfrac{\vert{\mathcal S}\vert!(\vert{\mathcal F}\vert-\vert{\mathcal S}\vert-1)!}{\vert{\mathcal F}\vert!}\left[\widehat{f}_{{\mathcal S}\cup\lbrace i \rbrace}(\boldsymbol{x}_t)-\widehat{f}_{\mathcal S}(\boldsymbol{x}_t)\right]">
 
 as the SHAP value of <img src="https://render.githubusercontent.com/render/math?math=i">-th input variable
 at sample 
