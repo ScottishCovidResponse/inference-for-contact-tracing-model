@@ -68,5 +68,6 @@ each input parameter's impact towards output per-sample basis.
 For full understanding of SHAP, we encourage users to read the [NeurIPS paper](http://papers.nips.cc/paper/7062-a-unified-approach-to-interpreting-model-predictions) and/or [Nature Machine Intelligence paper](https://www.nature.com/articles/s42256-019-0138-9) that explains how SHAP values are efficiently computed when the predictor is a tree ensemble.
 
 For users who do not have time to read the full papers, we here prepared 
-[a simplified document](interprete_analysis.md) about how to read the analysis results intuitively,
-while only the essential parts in mathematical formulation are explained.
+[a simplified document](explain_shap.md) to intuitively understand what is SHAP.
+We also explained how to read the analysis results in [this document](./read_plots.md) by
+taking an example for a synthetic dense homogeneous contacts data.
