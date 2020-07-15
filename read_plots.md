@@ -3,13 +3,10 @@
 By running `src/analyse_parameters.py` we obtain multiple scatter plots to understand
 the relationship between input parameters and output by `Contact-Tracing-Model`.
 These plots are provided by [SHapley Additive exPlanations (SHAP)](https://github.com/slundberg/shap),
-and you can read [here](./interprete_analysis.md)
+and you can read a brief explanation [here](./explain_shap.md)
 
-in this document we explain how to read the resulting PDF files.
- 
-The essential formulas of SHAP first appeared in
-the [NeurIPS paper](http://papers.nips.cc/paper/7062-a-unified-approach-to-interpreting-model-predictions),
-while here we provide a simplified explanation with omitting proofs etc.
+By assuming the basic understanding about what SHAP is,
+in this document we explain how to read the resulting report files.
 
 ## Reading the Plots
 
@@ -38,7 +35,7 @@ where the boundary condition is that no contact corresponds to zero exposure pro
 `exposure_probability4unit_contact` corresponds to the probability of exposure when contact weight is one,
 and this parameter determines the overall level of exposure. It is natural to see that small/large values of this parameter
 result in negative/positive SHAP values, respectively. This parameter mainly determines the scale of overall infection.
-- The third most important parameter is `exposure_exponent` which gives the sensitivity between contact strength and exposure probability. The high the exponent is, the more the exposure probability drastically increases by increase of contact weight. It is also natural to see the importance of this parameter, because it enables to interprete
+- The third most important parameter is `exposure_exponent` which gives the sensitivity between contact strength and exposure probability. The higher the exponent is, the more the exposure probability drastically increases by increase of contact weight. It is also natural to see the importance of this parameter, because it enables to interprete
 the abstractly defined contact weight by a more explicit terminology of exposure probability.
 - We can see the influence of other parameters as well. The influence towards the entire death, however,
 is much smaller than the first three parameters. This implies that we must first tune the first three parameters

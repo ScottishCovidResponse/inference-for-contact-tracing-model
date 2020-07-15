@@ -71,7 +71,7 @@ and hence is an important parameter in our simulation model.
 The magnitude of output change, however, can depend on which other variables are included
 in the evaluation. For example, instead of the difference between all and all-but-one, one could consider
 the difference between two variables and one variable. A natural way to obtain the sensitivity
-is to use the average the output change across all possible subset of the input variables. 
+is to average the output changes across all possible subsets of the input variables. 
 Let <img src="https://render.githubusercontent.com/render/math?math={\mathcal F}\triangleq\lbrace 1,2,\ldots,d\rbrace">
 be the set of all input variables
 and <img src="https://render.githubusercontent.com/render/math?math=\widehat{f}_{{\mathcal S}}(\boldsymbol{x})=\widehat{f}(\boldsymbol{x}_{{\mathcal S}})"> where <img src="https://render.githubusercontent.com/render/math?math=\boldsymbol{x}_{{\mathcal S}}"> is obtained by zeroing the input variables of
