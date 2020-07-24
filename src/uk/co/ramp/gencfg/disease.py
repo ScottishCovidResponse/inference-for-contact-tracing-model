@@ -55,7 +55,11 @@ class DiseaseSettings(object):
         result['time_test_result_mean'] = random_state.randint(low=1, high=3)
         result['time_test_result_max'] = result['time_test_result_mean'] + random_state.randint(low=1, high=5)
 
-        result['test_accuracy'] = random_state.beta(
+        result['test_positive_accuracy'] = random_state.beta(
+            self.test_acc_concentration * self.test_acc_mean,
+            self.test_acc_concentration * (1.0 - self.test_acc_mean)
+            )
+        result['test_negative_accuracy'] = random_state.beta(
             self.test_acc_concentration * self.test_acc_mean,
             self.test_acc_concentration * (1.0 - self.test_acc_mean)
             )
@@ -114,7 +118,8 @@ class DiseaseSettings(object):
                 "mean": param_dict['time_test_result_mean'],
                 "max": param_dict['time_test_result_max']
             },
-            "testAccuracy": param_dict['test_accuracy'],
+            "testPositiveAccuracy": param_dict['test_positive_accuracy'],
+            "testNegativeAccuracy": param_dict['test_negative_accuracy'],
             "exposureThreshold": param_dict['exposure_threshold'],
             "exposureProbability4UnitContact": param_dict['exposure_probability4unit_contact'],
             "exposureExponent": param_dict['exposure_exponent'],
