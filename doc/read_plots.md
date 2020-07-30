@@ -10,7 +10,7 @@ in this document we explain how to read the resulting report files.
 
 ## Reading the Plots
 
-Let us take [a 10,000-sample example for dense homogeneous contacts data](./example_result/homogeneous_contacts_dense/total_death.n10k.pdf). The analysis report PDF file has the following pages.  
+Let us take [a 10,000-sample example for dense homogeneous contacts data](../example_result/homogeneous_contacts_dense/total_death.n10k.pdf). The analysis report PDF file has the following pages.  
 
 **Page 1. Scatter plot to confirm the predictive accuracy of the non-linear regression model.** 
 
@@ -95,4 +95,4 @@ unless you decide to use a small fixed value as `random_infection_rate`.
 
 You can refer to other examples
 that have different contacts and/or have smaller or larger sample sizes,
-in the sub directories under [example_result](./example_result) directory.
+in the sub directories under [example_result](../example_result) directory.

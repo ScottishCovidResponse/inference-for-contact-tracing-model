@@ -22,3 +22,9 @@ python src/unify_draws.py ${dirlistfile} ${workdir}
 
 # Draw SHAP plots for the final sensitivity analysis
 python src/analyse_sensitivity.py ${workdir}
+
+# Draw efficient frontier between total isolation days and total infections
+# The second metric should be not infections but death, but due to the lack of implementation
+# of proper transition process from severe infection to death, at the moment we just focus on the total infections.
+python src/policy_frontier.py ${workdir} --metricA=person_days_in_isolation --metricB=total_infections
+

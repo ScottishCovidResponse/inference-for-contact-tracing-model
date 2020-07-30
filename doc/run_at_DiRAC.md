@@ -5,7 +5,7 @@ intensive when you need 10,000 to 100,000 samples. Hence we parallelised this dr
 part by exploiting SLURM. 
 
 If your interest is just obtaining large-sample results, then all you need to do is
-to just edit the variables `n_tasks`, `n_simulations_per_task`, and `workdir` in [run_all.sh](run_all.sh)
+to just edit the variables `n_tasks`, `n_simulations_per_task`, and `workdir` in [run_all.sh](../run_all.sh)
 and executing it. An example below provides 10,000-sample results by using 10 nodes, where 1000 samples per node are sequentially generated. 
 
 ```
@@ -16,8 +16,8 @@ n_simulations_per_task=1000
 workdir=${HOME}/covid-19/sensitivity10000
 ```
 
-What `run_all.sh` is doing is relatively simple and you can further edit [slurm_draw_parameters](slurm_draw_parameters).
-if you need to adjust into your environment. As seen below, the first argument of [slurm_draw_parameters](slurm_draw_parameters) is the directory into which you want to store the results. The second argument
+What `run_all.sh` is doing is relatively simple and you can further edit [slurm_draw_parameters](../slurm_draw_parameters).
+if you need to adjust into your environment. As seen below, the first argument of [slurm_draw_parameters](../slurm_draw_parameters) is the directory into which you want to store the results. The second argument
 is the number of samples sequentially generated in each node. Note that every node adopts a different random seed
 and each sequential sample also has a different seed. Hence you do not need to worry about the randomness
 of the results.
@@ -44,7 +44,7 @@ the actual values of input parameters and output metrics, respectively. One row 
 corresponds to one sample of input parameters and output metrics, and each column corresponds to one parameter 
 variable and one output metric.
 
-Then in the following lines in [run_all.sh](run_all.sh), the list of directories are saved in a text file
+Then in the following lines in [run_all.sh](../run_all.sh), the list of directories are saved in a text file
 `workdirlist.txt` for each of the job. 
 Finally, `src/unify_draws.py` reads all of the CSV files located by this unified list of data directories,
 and writes one unified `input_parameter_samples.csv` and `output_loss_samples.csv`
