@@ -133,7 +133,8 @@ the total computational cost becomes linear to the sample size as <img src="http
 
 **Empirical Metrics and their Frontier** 
 
-We do the scatter plot of the empirical statistics
+Scatter plot of the empirical statistics
 <img src="https://render.githubusercontent.com/render/math?math=(\widehat{u}_{avg,i},\widehat{v}_{avg,i})_{i=1}^n">
-and we can easily watch how much scores can be achieved when we adopt the policies only on the frontier.
-We compute the piecewise-linear empirical frontier that exists in the left-bottom of the scatter plot.
+clarifies how much scores can be achieved when we adopt the policies only on the frontier.
+By sorting the score values of x-axis,
+we compute the path of piecewise-linear empirical frontier.

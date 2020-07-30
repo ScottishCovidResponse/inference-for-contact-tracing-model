@@ -24,6 +24,7 @@ from scipy.interpolate import interp1d
 import os
 from docopt import docopt
 from six.moves import cPickle as pickle
+from sklearn.utils import check_random_state
 import shap
 from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.pyplot as plt
@@ -58,7 +59,6 @@ def fit_frontier(case_loss, X, policy_parameter_columns, score_columns, seed):
         
     # Fit the efficient frontier curve
     frontier_line = interp1d(frontier_scores[score_columns[0]], frontier_scores[score_columns[1]], kind='linear')
-    
         
     return frontier_policies, frontier_scores, frontier_line
 
@@ -92,12 +92,14 @@ if __name__ == '__main__':
         modelB = pickle.load(fin)
     
     n = X.shape[0]
+    k = n if n <= 1000 else 1000
     average_case_loss = np.zeros((n, 2))
     worst_case_loss = np.zeros((n, 2))
+    random_state = check_random_state(seed)
     for i in range(n):
         xpolicy_i = X[policy_parameter_columns].iloc[i].values
-        X_i = X.copy(deep=True)
-        X_i[policy_parameter_columns] = np.vstack([xpolicy_i.reshape(1, -1) for _ in range(n)])
+        X_i = X.iloc[random_state.choice(n, size=k)]
+        X_i[policy_parameter_columns] = np.vstack([xpolicy_i.reshape(1, -1) for _ in range(k)])
         yA = modelA.predict(X_i)
         yB = modelB.predict(X_i)
         # Current Problem: unless providing reasonable values of 'random_infection_rate', 'exposure_exponent', and 'exposure_probability4unit_contact',
