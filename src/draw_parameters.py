@@ -34,7 +34,7 @@ from uk.co.ramp.gencfg.population import PopulationSettings
 from uk.co.ramp.gencfg.isolation_policies import IsolationPolicies
 from uk.co.ramp.gencfg.tracing_policies import TracingPolicies
 
-loss_names = ['peak_severity', 'total_death', 'person_days_in_isolation']
+loss_names = ['peak_severity', 'total_death', 'total_infections', 'death_to_recovery_ratio', 'person_days_in_isolation']
 
 
 def losses(output_summary, output_stat):
@@ -50,7 +50,12 @@ def losses(output_summary, output_stat):
     Because output_summary is given as total population, number of death at the LAST timestamp is taken.
     About severity, here we focus on the peak value, that is hitting hospital capacity.
     """
-    return [output_summary['sev'].max(), output_summary['d'].iloc[-1], output_stat['Person Days in Isolation']]
+    return [
+        output_summary['sev'].max(),
+        output_summary['d'].iloc[-1],
+        output_summary['d'].iloc[-1] + output_summary['r'].iloc[-1],
+        float(output_summary['d'].iloc[-1]) / output_summary['r'].iloc[-1],
+        output_stat['Person Days in Isolation']]
 
 
 if __name__ == '__main__':
@@ -78,7 +83,7 @@ if __name__ == '__main__':
     
     disease = DiseaseSettings(random_state=seed)
     population = PopulationSettings(random_state=seed)
-    isopolicy = IsolationPolicies(random_state=seed)
+    isopolicy = IsolationPolicies(random_state=seed, simplified=True)  # simplified=False if more complex policy space is searched for.
     tracepolicy = TracingPolicies(random_state=seed)
     
     X_columns = []

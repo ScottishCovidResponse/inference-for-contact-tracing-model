@@ -25,7 +25,12 @@ class IsolationPolicies(object):
     
     def __init__(
             self,
+            simplified=True,
             random_state=None):
+        '''
+        simplified : whether to search in a lower-dimensional simplified policy space
+        '''
+        self.simplified = simplified
         self.random_state = check_random_state(random_state)
     
     def next(self):
@@ -36,10 +41,18 @@ class IsolationPolicies(object):
         random_state = self.random_state
         result = OrderedDict()
         
-        result['alert_policy_prioritised'] = random_state.choice([0, 1]) 
-        for sta in IsolationPolicies._virus_statuses + IsolationPolicies._alert_statuses:
-            result['{}_isolation_time_mean'.format(sta)] = random_state.randint(low=1, high=28)
-            result['{}_start_of_isolation_is_absolute'.format(sta)] = random_state.choice([0, 1]) 
+        result['alert_policy_prioritised'] = random_state.choice([0, 1])
+        result['no_isolation_tested_negative'] = random_state.choice([0, 1])
+        if self.simplified:
+            is_absolute = random_state.choice([0, 1]) 
+            time_mean = random_state.randint(low=1, high=14)
+            for sta in IsolationPolicies._virus_statuses + IsolationPolicies._alert_statuses:
+                result['{}_isolation_time_mean'.format(sta)] = time_mean
+                result['{}_start_of_isolation_is_absolute'.format(sta)] = is_absolute
+        else:
+            for sta in IsolationPolicies._virus_statuses + IsolationPolicies._alert_statuses:
+                result['{}_isolation_time_mean'.format(sta)] = random_state.randint(low=1, high=14)
+                result['{}_start_of_isolation_is_absolute'.format(sta)] = random_state.choice([0, 1])
         
         return result
         
@@ -89,6 +102,8 @@ class IsolationPolicies(object):
                     entry['isolationProperty']['priority'] = 2
                     virus_lst.append(entry)
                 elif sta in IsolationPolicies._alert_statuses:
+                    if sta == 'tested_negative' and param_dict['no_isolation_tested_negative'] > 0:
+                        continue
                     entry['alertStatus'] = sta.upper()
                     entry['isolationProperty']['priority'] = 3 if param_dict['alert_policy_prioritised'] else 1
                     alert_lst.append(entry)

@@ -42,7 +42,7 @@ def fit_frontier(case_loss, X, policy_parameter_columns, score_columns, seed):
         th = np.arange(n)[filt][case_loss[filt, 1].argmin()]
         y_th = case_loss[th, 1]
         policy_th = X[policy_parameter_columns].iloc[th].values
-        if old_th is None or th != old_th or j == n - 1:  # new trade-off point
+        if old_th is None or th != old_th:  # new trade-off point
             frontier_policies.append(policy_th.reshape(1, -1))
             frontier_scores.append(np.array([x_th, y_th]).reshape(1, -1))
         old_th = th
@@ -58,6 +58,7 @@ def fit_frontier(case_loss, X, policy_parameter_columns, score_columns, seed):
         
     # Fit the efficient frontier curve
     frontier_line = interp1d(frontier_scores[score_columns[0]], frontier_scores[score_columns[1]], kind='linear')
+    
         
     return frontier_policies, frontier_scores, frontier_line
 
@@ -117,12 +118,12 @@ if __name__ == '__main__':
     avg_score_columns = ['E[{}]'.format(metricA), 'E[{}]'.format(metricB)]
     avg_frontier_policies, avg_frontier_scores, avg_frontier_line = fit_frontier(
         average_case_loss, X, policy_parameter_columns, avg_score_columns, seed)
-    avg_xrange = np.linspace(average_case_loss[:, 0].min(), average_case_loss[:, 0].max(), 1000)
+    avg_xrange = np.linspace(avg_frontier_line.x.min(), avg_frontier_line.x.max(), 1000)
     
     worst_score_columns = ['Q99[{}]'.format(metricA), 'Q99[{}]'.format(metricB)]
     worst_frontier_policies, worst_frontier_scores, worst_frontier_line = fit_frontier(
         worst_case_loss, X, policy_parameter_columns, worst_score_columns, seed)
-    worst_xrange = np.linspace(worst_case_loss[:, 0].min(), worst_case_loss[:, 0].max(), 1000)
+    worst_xrange = np.linspace(worst_frontier_line.x.min(), worst_frontier_line.x.max(), 1000)
     
     with PdfPages('{}/{}.pdf'.format(workdir, outprefix)) as pdf:
         plt.figure(figsize=(6, 6))

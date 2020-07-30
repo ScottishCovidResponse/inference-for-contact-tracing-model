@@ -30,8 +30,9 @@ class TracingPolicies(object):
         random_state = self.random_state
         result = OrderedDict()
         
+        result['alert_by_tested_positive'] = random_state.choice([0, 1])
         for sta in TracingPolicies._virus_statuses:
-            result['{}_recent_contacts_lookbacktime'.format(sta)] = random_state.randint(low=1, high=28)
+            result['{}_recent_contacts_lookbacktime'.format(sta)] = random_state.randint(low=1, high=14)
         
         return result
         
@@ -44,7 +45,7 @@ class TracingPolicies(object):
             if 'recent_contacts_lookbacktime' in key:
                 sta = key.replace('_recent_contacts_lookbacktime', '')
                 entry = {
-                    "reporterAlertStatus": "NONE",
+                    "reporterAlertStatus": "TESTED_NEGATIVE" if param_dict['alert_by_tested_positive'] > 0 else "NONE",
                     "reporterVirusStatus": sta.upper(),
                     "recentContactsLookBackTime": param_dict['{}_recent_contacts_lookbacktime'.format(sta)],
                     "timeDelayPerTraceLink": {

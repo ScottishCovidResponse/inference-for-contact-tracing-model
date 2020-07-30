@@ -16,9 +16,9 @@ class DiseaseSettings(object):
             self,
             test_acc_mean=0.95,
             test_acc_concentration=5.0,
-            random_infection_rate_mean=0.05,
-            random_infection_rate_concentration=20.0,
-            exposure_probability4unit_contact_mean=0.01,
+            random_infection_rate_mean=0.0001,
+            random_infection_rate_concentration=10.0,
+            exposure_probability4unit_contact_mean=0.05,
             exposure_probability4unit_contact_concentration=20.0,
             random_state=None):
         self.random_state = check_random_state(random_state)
@@ -69,7 +69,7 @@ class DiseaseSettings(object):
             self.exposure_probability4unit_contact_concentration * self.exposure_probability4unit_contact_mean,
             self.exposure_probability4unit_contact_concentration * (1.0 - self.exposure_probability4unit_contact_mean)
             )
-        result['exposure_exponent'] = random_state.lognormal(0.0, 1.0)
+        result['exposure_exponent'] = random_state.lognormal(0.0, 0.3)
         
         result['random_infection_rate'] = random_state.beta(
             self.random_infection_rate_concentration * self.random_infection_rate_mean,
