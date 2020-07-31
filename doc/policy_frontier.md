@@ -108,9 +108,13 @@ By calling `src/draw_parameters` we already have
 <img src="https://render.githubusercontent.com/render/math?math=(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{i,env})_{i=1}^n">. Then for each policy-parameter sample <img src="https://render.githubusercontent.com/render/math?math=\boldsymbol{x}_{i,policy}">, we compute the empirical mean as
 
 <img src="https://render.githubusercontent.com/render/math?math=\widehat{u}_{avg,i}=\frac{1}{n}\sum_{j=1}^n
-\widehat{f}(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{j,env})"> and
+\widehat{f}(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{j,env})"> 
+
+and
+
 <img src="https://render.githubusercontent.com/render/math?math=\widehat{v}_{avg,i}=\frac{1}{n}\sum_{j=1}^n
-\widehat{g}(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{j,env})">. 
+\widehat{g}(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{j,env})">
+. 
 
 We can also compute the empirical 99%-tiles 
 <img src="https://render.githubusercontent.com/render/math?math=\widehat{u}_{worst,i}"> and
@@ -123,9 +127,14 @@ We compute the empirical statistics for all policy parameter samples <img src="h
 indices. Then
 
 <img src="https://render.githubusercontent.com/render/math?math=\widehat{u}_{avg,i}=\frac{1}{k}\sum_{j=1}^k
-\widehat{f}(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{\pi_j,env})"> and
+\widehat{f}(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{\pi_j,env})"> 
+
+and
+
+
 <img src="https://render.githubusercontent.com/render/math?math=\widehat{v}_{avg,i}=\frac{1}{k}\sum_{j=1}^k
-\widehat{g}(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{\pi_j,env})">. 
+\widehat{g}(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{\pi_j,env})">
+. 
 
 We think 
 <img src="https://render.githubusercontent.com/render/math?math=k=1,000"> provides a sufficient accuracy and hence
