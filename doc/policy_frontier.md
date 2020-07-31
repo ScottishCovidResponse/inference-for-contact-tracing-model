@@ -107,14 +107,8 @@ By calling `src/draw_parameters` we already have
 <img src="https://render.githubusercontent.com/render/math?math=X_{env}"> as
 <img src="https://render.githubusercontent.com/render/math?math=(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{i,env})_{i=1}^n">. Then for each policy-parameter sample <img src="https://render.githubusercontent.com/render/math?math=\boldsymbol{x}_{i,policy}">, we compute the empirical mean as
 
-<img src="https://render.githubusercontent.com/render/math?math=\widehat{u}_{avg,i}=\frac{1}{n}\sum_{j=1}^n
-\widehat{f}(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{j,env})"> 
-
-and
-
-<img src="https://render.githubusercontent.com/render/math?math=\widehat{v}_{avg,i}=\frac{1}{n}\sum_{j=1}^n
-\widehat{g}(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{j,env})">
-. 
+<a href="https://www.codecogs.com/eqnedit.php?latex=\widehat{u}_{avg,i}=\frac{1}{n}\sum_{j=1}^n\widehat{f}(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{j,env})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\widehat{u}_{avg,i}=\frac{1}{n}\sum_{j=1}^n\widehat{f}(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{j,env})" title="\widehat{u}_{avg,i}=\frac{1}{n}\sum_{j=1}^n\widehat{f}(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{j,env})" /></a> and
+<a href="https://www.codecogs.com/eqnedit.php?latex=\widehat{v}_{avg,i}=\frac{1}{n}\sum_{j=1}^n&space;\widehat{g}(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{j,env})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\widehat{v}_{avg,i}=\frac{1}{n}\sum_{j=1}^n&space;\widehat{g}(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{j,env})" title="\widehat{v}_{avg,i}=\frac{1}{n}\sum_{j=1}^n \widehat{g}(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{j,env})" /></a>. 
 
 We can also compute the empirical 99%-tiles 
 <img src="https://render.githubusercontent.com/render/math?math=\widehat{u}_{worst,i}"> and
@@ -126,15 +120,8 @@ We compute the empirical statistics for all policy parameter samples <img src="h
 <img src="https://render.githubusercontent.com/render/math?math=\pi_1, \pi_2, \ldots, \pi_k"> be randomly chosen 
 indices. Then
 
-<img src="https://render.githubusercontent.com/render/math?math=\widehat{u}_{avg,i}=\frac{1}{k}\sum_{j=1}^k
-\widehat{f}(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{\pi_j,env})"> 
-
-and
-
-
-<img src="https://render.githubusercontent.com/render/math?math=\widehat{v}_{avg,i}=\frac{1}{k}\sum_{j=1}^k
-\widehat{g}(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{\pi_j,env})">
-. 
+<a href="https://www.codecogs.com/eqnedit.php?latex=\widehat{u}_{avg,i}=\frac{1}{k}\sum_{j=1}^k&space;\widehat{f}(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{\pi_j,env})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\widehat{u}_{avg,i}=\frac{1}{k}\sum_{j=1}^k&space;\widehat{f}(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{\pi_j,env})" title="\widehat{u}_{avg,i}=\frac{1}{k}\sum_{j=1}^k \widehat{f}(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{\pi_j,env})" /></a> and
+<a href="https://www.codecogs.com/eqnedit.php?latex=\widehat{v}_{avg,i}=\frac{1}{k}\sum_{j=1}^k&space;\widehat{g}(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{\pi_j,env})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\widehat{v}_{avg,i}=\frac{1}{k}\sum_{j=1}^k&space;\widehat{g}(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{\pi_j,env})" title="\widehat{v}_{avg,i}=\frac{1}{k}\sum_{j=1}^k \widehat{g}(\boldsymbol{x}_{i,policy},\boldsymbol{x}_{\pi_j,env})" /></a>. 
 
 We think 
 <img src="https://render.githubusercontent.com/render/math?math=k=1,000"> provides a sufficient accuracy and hence
