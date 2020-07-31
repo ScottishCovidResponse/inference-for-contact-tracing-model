@@ -82,10 +82,10 @@ taking an example for a synthetic dense homogeneous contacts data.
 
 # How to Read the Policy Frontier and Recommendations
 
-The script `src/policy_frontier.py` generates a PDF file to show the efficient frontier
+The script `src/policy_frontier.py` generates a PDF file `${prefix}.tradeoffs.pdf` to show the efficient frontier
 that empirically focuses on the average case and 99%-tile worst case.
 The concrete values of the policy parameters on that efficient frontier are stored
-in `averageworst_frontier_policies.csv` and `worst_frontier_policies.csv`.
+in `${prefix}.averag_case_policies.csv` and `${prefix}.worst_case_policies.csv`.
 [This document](doc/policy_frontier.md) provides the details how this frontier is computed
 and how to read the policy recommendation files.
 

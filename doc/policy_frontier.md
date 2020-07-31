@@ -2,12 +2,12 @@
 
 By running `src/policy_frontier.py` we obtain an efficient frontier between two focused metrics,
 which by default are the total number of days in isolation and the total number of deaths.
-Each dot in `frontier.pdf` corresponds to the vector of all policy parameters,
+Each dot in `${prefix}.tradeoffs.pdf` corresponds to the vector of all policy parameters,
 and the x-axis and y-axis scores for this vector is computed by many samples of random disease parameters.
 
 This document first provides how these metrics are computed, whose understanding is
 essential for meaningful recommendation of policies. Then we discuss how to read the resulting CSV files
-`average_frontier_policies.csv` and `worst_frontier_policies.csv`.
+`${prefix}.average_case_policies.csv` and `${prefix}.worst_case_policies.csv`.
 
 ## Definition of the Frontiers
 
@@ -93,15 +93,15 @@ as the average case. We call the resulting trade-off as the worst-case efficient
 Now we have definitions of the average-case and worse-case policy frontiers that exist
 under the true functions <img src="https://render.githubusercontent.com/render/math?math=(f, g)">
 and the true distributions of environmental parameters.
-In reality, what we can have are only their empirical approximations. In this section
-how we get good empirical approximations.
+In reality, what we can have are only a finite number of samples to approximate the true value.
+Here we discuss how to empirically approximate the frontiers.
 
 **Empirical Mean or Percentile of the Metrics** 
 
-We first assume that we have good empirical approximation of 
+We first assume that by certain machine learning algorithms we have a good estimate of 
 <img src="https://render.githubusercontent.com/render/math?math=(f, g)">
-by <img src="https://render.githubusercontent.com/render/math?math=(\widehat{f}, \widehat{g})">,
-through certain machine learning algorithms. By `src/draw_parameters` we already have
+as <img src="https://render.githubusercontent.com/render/math?math=(\widehat{f}, \widehat{g})">.
+By calling `src/draw_parameters` we already have
 <img src="https://render.githubusercontent.com/render/math?math=n"> random samples
 <img src="https://render.githubusercontent.com/render/math?math=X_{policy}"> and
 <img src="https://render.githubusercontent.com/render/math?math=X_{env}"> as
