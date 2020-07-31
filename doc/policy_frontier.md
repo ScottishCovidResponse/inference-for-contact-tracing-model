@@ -60,9 +60,7 @@ For many metrics of our interest, we expect that there is some trade-off between
 <img src="https://render.githubusercontent.com/render/math?math=u_{avg}"> and that of 
 <img src="https://render.githubusercontent.com/render/math?math=v_{avg}">. Hence we want
 
-<img src="https://render.githubusercontent.com/render/math?math=\widehat{X}_{policy}^{(avg)}(C)=\min_{x\in\Pi}   u_{avg}(x)">
- subject to <img src="https://render.githubusercontent.com/render/math?math=v_{avg}(x)\leq C"> for a specified constant
- <img src="https://render.githubusercontent.com/render/math?math=C">. 
+<a href="https://www.codecogs.com/eqnedit.php?latex=\widehat{X}_{policy}^{(avg)}(C)=\min_{x\in\Pi}&space;u_{avg}(x)\mbox{&space;subject&space;to&space;}v_{avg}(x)\leq&space;C" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\widehat{X}_{policy}^{(avg)}(C)=\min_{x\in\Pi}&space;u_{avg}(x)\mbox{&space;subject&space;to&space;}v_{avg}(x)\leq&space;C" title="\widehat{X}_{policy}^{(avg)}(C)=\min_{x\in\Pi} u_{avg}(x)\mbox{ subject to }v_{avg}(x)\leq C" /></a>  for a specified constant <img src="https://render.githubusercontent.com/render/math?math=C">. 
 
 For a given <img src="https://render.githubusercontent.com/render/math?math=C"> there is no rationality
 to choose policy parameters other than 
