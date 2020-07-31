@@ -19,10 +19,13 @@ import pandas as pd
 import os
 from docopt import docopt
 from sklearn.ensemble import ExtraTreesRegressor
-from sklearn.model_selection import GridSearchCV
+from lightgbm import LGBMRegressor
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.model_selection import train_test_split
 from six.moves import cPickle as pickle
 import shap
+import itertools
+from sklearn.metrics import mean_squared_error
 from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.pyplot as plt
 
@@ -45,32 +48,36 @@ if __name__ == '__main__':
         n_train = X_train.shape[0]
         ms_list = np.unique(np.round(np.logspace(np.log10(2.0), np.log10(np.min([1000, n_train / 2])), 10)).astype(int))
         
-        # ToDo: For large sample size, the resulting extra trees become too big due to the depth of trees. 
-        #       Consider LightGBM instead
-        model_cv = GridSearchCV(
-            estimator=ExtraTreesRegressor(
-                n_estimators=100,
+        # Fast search of hyperparameters of minimal out-of-bag MSE
+        min_mse = np.inf
+        best_ms = 1
+        best_mf = 1.0
+        for ms, mf in itertools.product(ms_list, [int(1), 0.33, 1.0]):
+            tmodel = ExtraTreesRegressor(
+                n_estimators=50,
                 criterion='mse',
                 max_depth=None,
                 bootstrap=True,
-                oob_score=False,
+                oob_score=True,
+                min_samples_split=ms,
+                max_features=mf,
                 n_jobs=n_jobs,
-                random_state=seed),
-            param_grid={
-                'min_samples_split': ms_list,
-                'max_features': [int(1), 0.33, 1.0]
-                },
-            scoring='neg_mean_squared_error').fit(X_train, y_train)
-            
-        # By using best complexity, fit a final model with larger number of trees
+                random_state=seed).fit(X_train, y_train)
+            mse = mean_squared_error(y_true=y_train, y_pred=tmodel.oob_prediction_)
+            if mse < min_mse:
+                min_mse = mse
+                best_ms = ms
+                best_mf = mf
+
+        # Fit extra trees of the best hyperparameter, without generating memory-consuming oob_prediction_
         model = ExtraTreesRegressor(
-            n_estimators=1000,
+            n_estimators=100,
             criterion='mse',
             max_depth=None,
             bootstrap=True,
-            min_samples_split=model_cv.best_params_['min_samples_split'],
-            max_features=model_cv.best_params_['max_features'],
             oob_score=False,
+            min_samples_split=best_ms,
+            max_features=best_mf,
             n_jobs=n_jobs,
             random_state=seed).fit(X_train, y_train)
         
