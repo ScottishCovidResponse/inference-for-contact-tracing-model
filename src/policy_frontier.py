@@ -26,7 +26,6 @@ import os
 from docopt import docopt
 from six.moves import cPickle as pickle
 from sklearn.utils import check_random_state
-import shap
 from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.pyplot as plt
 from uk.co.ramp.gencfg.isolation_policies import IsolationPolicies
@@ -169,6 +168,6 @@ if __name__ == '__main__':
         pdf.savefig()
         plt.close()
         
-    pd.concat([avg_frontier_policies, avg_frontier_scores], axis=1).to_csv('{}/{}.average_case_policies.csv'.format(workdir, outprefix))
-    pd.concat([worst_frontier_policies, worst_frontier_scores], axis=1).to_csv('{}/{}.worst_case_policies.csv'.format(workdir, outprefix))
+    pd.concat([avg_frontier_scores, avg_frontier_policies], axis=1).to_csv('{}/{}.average_case_policies.csv'.format(workdir, outprefix))
+    pd.concat([worst_frontier_scores, worst_frontier_policies], axis=1).to_csv('{}/{}.worst_case_policies.csv'.format(workdir, outprefix))
         
