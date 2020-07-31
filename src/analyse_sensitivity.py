@@ -19,8 +19,6 @@ import pandas as pd
 import os
 from docopt import docopt
 from sklearn.ensemble import ExtraTreesRegressor
-from lightgbm import LGBMRegressor
-from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.model_selection import train_test_split
 from six.moves import cPickle as pickle
 import shap
